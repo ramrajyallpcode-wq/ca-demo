@@ -39,6 +39,4 @@ app.get("/blog", function (req, res) {
   res.render("blog", {});
 });
 
-app.listen(108, () => {
-  console.log("working on 108");
-});
+module.exports = app;
