@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= blogTitle %></title>
+    <meta name="description" content="">
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <style>
+         /* custom tiny mce css  */
+    .no-tailwindcss-base h4,
+    .no-tailwindcss-base h5,
+    .no-tailwindcss-base h6 {
+      /* font-size: revert; */
+      font-weight: revert;
+      margin: 10px 0 10px 0;
+      padding: revert;
+      /* font-size: 26px; */
+      font-size: 2rem;
+      font-weight: 500;
+    }
+
+    .no-tailwindcss-base h3 {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 25px 0px 15px 0;
+    }
+
+    .no-tailwindcss-base h2 {
+      font-size: 24px;
+      font-weight: 500;
+      margin: 40px 0px 10px 0;
+    }
+
+    .no-tailwindcss-base h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin: 60px 0 20px;
+    }
+
+    .no-tailwindcss-base ol,
+    .no-tailwindcss-base ul {
+      list-style: revert;
+      margin: revert;
+      padding: revert;
+      list-style-position: inside;
+      padding-left: 5px;
+    }
+
+    .no-tailwindcss-base ol,
+    .no-tailwindcss-base ul>li {
+      /* list-style: revert;
+      margin-top: 10px;
+      padding: revert;
+      margin-left: 0;
+      color: #333333; */
+      list-style: revert;
+      margin: revert;
+      padding: revert;
+      list-style-position: inside;
+      padding-left: 5px;
+
+    }
+
+    .no-tailwindcss-base p {
+      margin: 6px 0 6px 0;
+    }
+
+    .no-tailwindcss-base img {
+      width: 90% !important;
+      height: auto !important;
+      object-fit: cover !important;
+    }
+
+    .no-tailwindcss-base table,
+    th,
+    td {
+      border: 1px solid;
+      margin: 16px 8px;
+      padding: 4px 8px;
+      overflow-x: auto;
+    }
+
+    /* tiny Mce style End  */
+    </style>
+</head>
+<body class="font-montserrat bg-gray-100">
+    <%- include('components/header') %>
+    <div class=" py-20 lg:py-20">
+        <div class="mx-auto lg:max-w-[1200px] px-4 md:px-8">
+          <img src="<%= blogImageUrl %>" alt="<%= blogImageAlt %>" class="w-full h-auto mb-2.5 rounded-xl object-fill" />
+          <h1 class="mb-2 text-start text-2xl mt-12 font-semibold font-poppins text-gray-800 lg:text-3xl "><%= blogTitle %></h1>
+        <div class="mb-4 flex items-center gap-x-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 text-theme2"> <path d="M12 11.993a.75.75 0 0 0-.75.75v.006c0 .414.336.75.75.75h.006a.75.75 0 0 0 .75-.75v-.006a.75.75 0 0 0-.75-.75H12ZM12 16.494a.75.75 0 0 0-.75.75v.005c0 .414.335.75.75.75h.005a.75.75 0 0 0 .75-.75v-.005a.75.75 0 0 0-.75-.75H12ZM8.999 17.244a.75.75 0 0 1 .75-.75h.006a.75.75 0 0 1 .75.75v.006a.75.75 0 0 1-.75.75h-.006a.75.75 0 0 1-.75-.75v-.006ZM7.499 16.494a.75.75 0 0 0-.75.75v.005c0 .414.336.75.75.75h.005a.75.75 0 0 0 .75-.75v-.005a.75.75 0 0 0-.75-.75H7.5ZM13.499 14.997a.75.75 0 0 1 .75-.75h.006a.75.75 0 0 1 .75.75v.005a.75.75 0 0 1-.75.75h-.006a.75.75 0 0 1-.75-.75v-.005ZM14.25 16.494a.75.75 0 0 0-.75.75v.006c0 .414.335.75.75.75h.005a.75.75 0 0 0 .75-.75v-.006a.75.75 0 0 0-.75-.75h-.005ZM15.75 14.995a.75.75 0 0 1 .75-.75h.005a.75.75 0 0 1 .75.75v.006a.75.75 0 0 1-.75.75H16.5a.75.75 0 0 1-.75-.75v-.006ZM13.498 12.743a.75.75 0 0 1 .75-.75h2.25a.75.75 0 1 1 0 1.5h-2.25a.75.75 0 0 1-.75-.75ZM6.748 14.993a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Z" /> <path fill-rule="evenodd" d="M18 2.993a.75.75 0 0 0-1.5 0v1.5h-9V2.994a.75.75 0 1 0-1.5 0v1.497h-.752a3 3 0 0 0-3 3v11.252a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3V7.492a3 3 0 0 0-3-3H18V2.993ZM3.748 18.743v-7.5a1.5 1.5 0 0 1 1.5-1.5h13.5a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-13.5a1.5 1.5 0 0 1-1.5-1.5Z" clip-rule="evenodd" /> </svg>
+          <span class="text-sm font-medium text-gray-600"><%= blogDate %></span>
+        </div>
+          <div class="mb-6 md:mb-8 prose space-y-2 [&_ul]:my-1 [&_li]:my-0.5 [&_p]:my-1 [&_h1]:my-2 [&_h2]:my-1.5 max-w-full"><%- blogContents %></p>
+      
+        </div>
+      </div>
+    </div>
+
+    <%- include('components/footer') %>
+
+</body>
+</html>

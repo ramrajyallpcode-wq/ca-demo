@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career & Education Blog – Latest Updates | Firm Name & Co</title>
+    <meta name="description" content="Stay updated with career guidance, college admissions, exam tips, and study abroad insights. Read expert blogs for your career growth.">
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="/js/utility.js"></script>
+
+</head>
+
+<body class="font-montserrat bg-gray-100">
+    <%- include('components/header') %>
+
+      <div class="bg-cover h-[250px] lg:h-[400px] flex items-center object-cover justify-center flex-col relative " style="background-image: url(images/about-banner.png)">
+    <div class="absolute inset-0 bg-gray-900/40"></div>
+    <div class="lg:mt-10 flex items-center justify-center flex-col w-full mt-10 ">
+      <h3 class="text-3xl text-center lg:text-4xl text-white relative z-0 mx-auto  font-bold tracking-wider">
+        Insight
+      </h3>
+      <nav class=" bg-gray-200/20 rounded-full px-6 mt-4 z-0 py-2">
+        <ol class="flex text-center justify-center">
+          <li>
+            <a href="/" class="text-white">Home</a>
+          </li>
+          <li>
+            <span class="mx-2 text-white font-semibold">&gt;</span>
+          </li>
+          <li>
+            <a href="#" class="text-white font-semibold">Insight</a>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+    <section class="py-10 lg:py-16 bg-gray-100">
+        <div class="mx-auto lg:max-w-[1300px] px-4 lg:px-8">
+            <div id="renderBlogsArray" class="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <!-- Blogs will be dynamically loaded here -->
+            </div>
+            <div id="loadingBlogsArrayContainer" class="grid sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+            <div id="loadMoreContainer" class="flex items-center justify-center mt-6">
+                <p id="loadMoreMsg" class="text-gray-600 font-medium"></p>
+                <button id="loadMoreBtn" class="px-4 py-2 bg-theme-2 flex items-center justify-center 
+                    disabled:cursor-not-allowed disabled:bg-theme-1 text-white rounded-md">
+                    Load More
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <%- include('components/footer') %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/moment/min/moment.min.js"></script>
+    <script>
+    
+
+        let page = 1;
+        let limit = 12;
+        let totalItems = 0;
+
+        function loadBlogs() {
+            $('#loadMoreBtn').prop('disabled', true).html(`
+                <div class="flex items-center justify-center">
+                    <div class="spinner-border animate-spin inline-block w-3.5 text-white h-3.5 
+                        border-[2px] border-white rounded-full"></div>
+                    <span class="ml-1.5">Loading...</span>
+                </div>
+            `).addClass('bg-theme-1').removeClass('bg-theme-2');
+
+            let selectFieldsQuery = "blogTitle,blogImage,createdAt,url_blogTitle,blogDesc,isActive";
+            let requestUrl = `/api/blog/${page}/${limit}?visibility=public&selectFieldsQuery=${encodeURIComponent(selectFieldsQuery)}`;
+
+            $.ajax({
+                url: requestUrl,
+                method: 'GET',
+                beforeSend: () => {
+                    if (page === 1) {
+                        $('#loadingBlogsArrayContainer').html(
+                            Array.from({ length: 3 })
+                                .map(() => `
+                                    <div class="group w-full p-4 border border-gray-300 rounded-2xl">
+                                        <div class="flex items-center mb-3 aspect-[3/2] bg-gray-50 animate-pulse">
+                                            <div class="rounded-2xl h-full w-full bg-gray-200"></div>
+                                        </div>
+                                        <div>
+                            <!-- Shimmer effect for published date -->
+                            <div class="h-4 bg-gray-200 rounded-full mb-1 w-1/3 animate-pulse"></div>
+                            <!-- Shimmer effect for title -->
+                            <div class="h-6 bg-gray-200 rounded-full mb-1 w-2/3 animate-pulse"></div>
+                            <!-- Shimmer effect for description -->
+                            <div class="space-y-2">
+                                <div class="h-4 bg-gray-200 rounded-full w-full animate-pulse"></div>
+                                <div class="h-4 bg-gray-200 rounded-full w-5/6 animate-pulse"></div>
+                            </div>
+                            <!-- Shimmer effect for Read more link -->
+                            <div class="h-4 bg-gray-200 rounded-full mt-3 w-1/4 animate-pulse"></div>
+                        </div>
+                                    </div>`
+                                ).join('')
+                        );
+                    }
+                },
+                success: (response) => {
+                    if (response.status === 200 && response.items) {
+                        const items = response.items;
+                        totalItems = response.totalCount;
+
+                        if (totalItems === 0 && page === 1) {
+                            $('#renderBlogsArray').html('<p class="text-center font-semibold">No Blogs Found.</p>');
+                            $('#loadMoreBtn').hide();
+                            return;
+                        }
+
+                        const newItemsHTML = items.map(item => {
+                            let publishedDate = moment(item.createdAt).format('ll');
+                            let imageUrl = item.blogImage || '/images/default-placeholder.png';
+
+                            return `
+                                <div class="group border border-gray-300 bg-white overflow-hidden shadow-sm">
+                                   <div class=" w-full">
+                                        <img loading="lazy" src="${item?.blogImage.image_url}" alt="${item?.blogImage.image_alt}" class="h-full w-full object-cover">
+                                    </div>
+                                    <div class="p-4">
+                                        <span class="text-theme1 text-sm font-medium block mb-1">${publishedDate}</span>
+                                        <h4 class="text-lg font-semibold mb-1 text-gray-900">${item.blogTitle}</h4>
+                                        <p class="text-gray-600 mb-3 line-clamp-2">${item.blogDesc}</p>
+                                        <a href="/blog/${item.blogTitleSlug}-${item._id}" class="text-theme2 font-medium">Read more...</a>
+                                    </div>
+                                </div>`;
+                        }).join('');
+
+                        $('#renderBlogsArray').append(newItemsHTML);
+
+                        if (page * limit < totalItems) {
+                            $('#loadMoreBtn').show().text('Load More').prop('disabled', false)
+                                .addClass('bg-theme-2').removeClass('bg-theme-1');
+                        } else {
+                            $('#loadMoreMsg').text('No more Insights found.');
+                            $('#loadMoreBtn').hide();
+                        }
+                    }
+                },
+                error: () => {
+                    $('#renderBlogsArray').html('<p class="text-center text-red-500">Error loading blogs. Please try again.</p>');
+                },
+                complete: () => {
+                    $('#loadMoreBtn').prop('disabled', false).text('Load More');
+                    $('#loadingBlogsArrayContainer').html('');
+                }
+            });
+        }
+
+        $('#loadMoreBtn').on('click', () => {
+            page += 1;
+            loadBlogs();
+        });
+
+        $(document).ready(() => {
+            loadBlogs();
+        });
+    </script>
+</body>
+
+</html>
